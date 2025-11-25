@@ -10,7 +10,7 @@ export default function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [localUser, setLocalUser] = useState(null);
 
-  const pathname = usePathname(); 
+  const pathname = usePathname();
   // TRIGGER useEffect whenever route changes
 
   useEffect(() => {
@@ -41,8 +41,14 @@ export default function Navbar() {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li><Link href="/">Home</Link></li>
-          <li><Link href="/products">Products</Link></li>
-          <li><Link href="/about">About</Link></li>
+          <li><Link href="/items">Products</Link></li>
+          {(localUser || session) && (
+            <>
+              <li><Link href="/add-product">Add Items</Link></li>
+              <li><Link href="/manage-products">Manage Products</Link></li>
+            </>
+          )}
+
         </ul>
       </div>
 
