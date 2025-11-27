@@ -13,7 +13,7 @@ export default function ItemsPage() {
 
     useEffect(() => {
         axios
-            .get("http://localhost:5000/gadgets")
+            .get("https://gadget-store-server-zeta.vercel.app/gadgets")
             .then((res) => {
                 setGadgets(res.data);
                 setLoading(false);

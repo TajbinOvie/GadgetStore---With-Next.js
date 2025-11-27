@@ -12,9 +12,9 @@ export default function LatestItems() {
         async function loadData() {
             try {
                 // If backend has /latest API, use this:
-                const res = await axios.get("http://localhost:5000/latest");
+                const res = await axios.get("https://gadget-store-server-zeta.vercel.app/latest");
 
-                // const res = await axios.get("http://localhost:5000/gadgets");
+                // const res = await axios.get("https://gadget-store-server-zeta.vercel.app/gadgets");
                 if (res.data) {
                     setItems(res.data.slice(-3)); // TEMP until latest endpoint exists
                 }

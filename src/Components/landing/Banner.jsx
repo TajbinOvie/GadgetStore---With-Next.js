@@ -12,7 +12,7 @@ export default function Carousel() {
     useEffect(() => {
         async function fetchSlides() {
             try {
-                const res = await axios.get("http://localhost:5000/gadgets");
+                const res = await axios.get("https://gadget-store-server-zeta.vercel.app/gadgets");
                 if (res.data && res.data.length > 0) {
                     setSlides(res.data.slice(0, 3));
                 }

@@ -30,7 +30,7 @@ export default function ManageProducts() {
     const load = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/gadgets?email=${userEmail}`
+          `https://gadget-store-server-zeta.vercel.app/gadgets?email=${userEmail}`
         );
         setGadgets(res.data);
       } catch (err) {
@@ -47,7 +47,7 @@ export default function ManageProducts() {
     if (!confirm("Delete this gadget?")) return;
 
     try {
-      const res = await axios.delete(`http://localhost:5000/gadgets/${id}`);
+      const res = await axios.delete(`https://gadget-store-server-zeta.vercel.app/gadgets/${id}`);
 
       if (res.data.deletedCount > 0) {
         setGadgets((prev) => prev.filter((g) => g._id !== id));

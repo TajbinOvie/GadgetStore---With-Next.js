@@ -44,7 +44,7 @@ export default function AddProductPage() {
         created_at: new Date().toISOString(),
       };
 
-      const res = await axios.post("http://localhost:5000/gadgets", payload);
+      const res = await axios.post("https://gadget-store-server-zeta.vercel.app/gadgets", payload);
 
       if (res.data.insertedId) {
         Swal.fire({
