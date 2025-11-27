@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🛒 Gadget Store – Next.js Frontend
 
-## Getting Started
+A modern and responsive **Gadget Store** frontend built with **Next.js**.  
+The app fetches products, categories, and related data from a **separate backend API** and displays them in a clean, user-friendly interface.
 
-First, run the development server:
+---
 
-```bash
+## ⚡ Features
+
+- Fully static Next.js frontend (API calls to external backend)
+- Product listing & product details
+- Add product form (UI only)
+- Responsive modern UI
+- Clean component structure
+- Easy Netlify deployment
+
+---
+
+## 🛠 Setup & Installation
+
+### 1. Clone the project
+
+git clone YOUR_REPO_URL
+cd gadget-store-frontend
+2. Install dependencies
+
+Copy code
+npm install
+3. Environment variables
+Create a .env.local file:
+
+ini
+Copy code
+NEXT_PUBLIC_API_URL=https://your-backend-api.com
+4. Run in development
+
+Copy code
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Open your browser at:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+arduino
+Copy code
+http://localhost:3000
+5. Create production build
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+Copy code
+npm run build
+6. Deploy
+Netlify automatically reads:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+netlify.toml
 
-## Learn More
+Build command: npm run build
 
-To learn more about Next.js, take a look at the following resources:
+Publish: .next
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Uses @netlify/plugin-nextjs
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Just connect your GitHub repo → “New project from Git” → Deploy.
 
-## Deploy on Vercel
+📁 Route Summary
+Route	Type	Description
+/	Page	Homepage with featured gadgets
+/products	Page	List of all gadgets from backend API
+/products/[id]	Dynamic Page	Single product details
+/add	Page	Add Product form (UI only, posts to backend manually later)
+/login	Page	Login UI
+/register	Page	Register UI
+/about	Page	About the store
+/contact	Page	Contact page
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+📦 Tech Stack
+Next.js 14+
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+React 18
+
+Tailwind CSS (if you're using it)
+
+REST API backend
+
+Netlify (deployment)
+
+❤️ Author
+Built by Tajbin Ovie 
