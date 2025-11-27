@@ -13,7 +13,7 @@ export default function ProductDetails() {
   useEffect(() => {
     async function fetchItem() {
       try {
-        const res = await fetch(`https://gadget-store-server-zeta.vercel.app/gadgets/${id}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/gadgets/${id}`);
         const data = await res.json();
 
         // If API returns an array, pick the first element
