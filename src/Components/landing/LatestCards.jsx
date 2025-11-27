@@ -12,7 +12,7 @@ export default function LatestItems() {
         async function loadData() {
             try {
                 // If backend has /latest API, use this:
-                const res = await axios.get("${process.env.NEXT_PUBLIC_API_URL}/latest");
+                const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/latest`);
 
                 // const res = await axios.get("${process.env.NEXT_PUBLIC_API_URL}/gadgets");
                 if (res.data) {
