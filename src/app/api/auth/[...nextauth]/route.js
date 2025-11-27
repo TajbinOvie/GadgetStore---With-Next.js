@@ -6,16 +6,12 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { MongoClient } from "mongodb";
 import bcrypt from "bcryptjs";
 
-// MongoDB client
-const client = new MongoClient(process.env.MONGODB_URI);
-let usersCollection;
-
+// Lazy-load MongoDB connection at runtime
 async function getUsersCollection() {
-  if (!usersCollection) {
-    await client.connect();
-    usersCollection = client.db("mydatabase").collection("users");
-  }
-  return usersCollection;
+  if (!process.env.MONGODB_URI) throw new Error("MONGODB_URI not set");
+  const client = new MongoClient(process.env.MONGODB_URI);
+  await client.connect();
+  return client.db("mydatabase").collection("users");
 }
 
 export const authOptions = {
@@ -32,40 +28,51 @@ export const authOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const { email, password } = credentials;
+        try {
+          const { email, password } = credentials;
 
-        // Hardcoded user (or replace with MongoDB later)
-        const user = {
-          id: "1",
-          name: "Test User",
-          email: "test@gmail.com",
-          password: bcrypt.hashSync("123456", 10),
-        };
+          // Hardcoded user for testing
+          const user = {
+            id: "1",
+            name: "Test User",
+            email: "test@gmail.com",
+            password: bcrypt.hashSync("123456", 10),
+          };
 
-        if (email !== user.email) return null;
-        const isPasswordCorrect = await bcrypt.compare(password, user.password);
-        if (!isPasswordCorrect) return null;
+          if (email !== user.email) return null;
 
-        return user;
+          const isPasswordCorrect = await bcrypt.compare(password, user.password);
+          if (!isPasswordCorrect) return null;
+
+          return user;
+        } catch (err) {
+          console.error("Authorize error:", err);
+          return null;
+        }
       },
     }),
   ],
 
   callbacks: {
     async signIn({ user, account }) {
-      if (account.provider === "google") {
-        const collection = await getUsersCollection();
-        const existingUser = await collection.findOne({ email: user.email });
-        if (!existingUser) {
-          await collection.insertOne({
-            name: user.name,
-            email: user.email,
-            image: user.image,
-            createdAt: new Date(),
-          });
+      try {
+        if (account.provider === "google") {
+          const collection = await getUsersCollection();
+          const existingUser = await collection.findOne({ email: user.email });
+          if (!existingUser) {
+            await collection.insertOne({
+              name: user.name,
+              email: user.email,
+              image: user.image,
+              createdAt: new Date(),
+            });
+          }
         }
+        return true;
+      } catch (err) {
+        console.error("SignIn callback error:", err);
+        return false;
       }
-      return true;
     },
 
     async jwt({ token, user }) {
@@ -80,8 +87,10 @@ export const authOptions = {
   },
 
   pages: {
-    signIn: "/login", // redirect all NextAuth signIns to /login
+    signIn: "/login",
   },
+
+  secret: process.env.NEXTAUTH_SECRET,
 };
 
 const handler = NextAuth(authOptions);
