@@ -79,16 +79,17 @@ export default function ItemsPage() {
                                 <h2 className="text-xl font-semibold">{item.title}</h2>
 
                                 <p className="text-gray-600 dark:text-gray-300 text-sm mt-2 line-clamp-2">
-                                    {item.summary}
+                                    {item.shortDesc}
                                 </p>
 
                                 <p className="mt-3 font-semibold">Rating: {item.rating}</p>
 
                                 {/* Makes button stick bottom */}
                                 <div className="mt-auto">
-                                    <button className="mt-4 w-full bg-black dark:bg-white dark:text-black text-white py-2 rounded-lg hover:bg-opacity-80 transition">
+                                    <button className="mt-4 w-full bg-[#FDC700] text-black py-2 rounded-lg hover:bg-yellow-400 transition">
                                         View Details
                                     </button>
+
                                 </div>
                             </div>
 

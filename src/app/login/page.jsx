@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
+import Swal from "sweetalert2";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -12,28 +13,46 @@ export default function LoginPage() {
   async function handleLogin(e) {
     e.preventDefault();
 
-    const res = await fetch("http://localhost:5000/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password })
-    });
+    try {
+      const res = await fetch("http://localhost:5000/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (!res.ok) {
-      alert(data.message);
-      return;
+      if (!res.ok) {
+        return Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: data.message || "Login failed",
+          confirmButtonColor: "#facc15",
+        });
+      }
+
+      // Save user in localStorage
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      Swal.fire({
+        icon: "success",
+        title: "Success!",
+        text: "Login successful 🎉",
+        confirmButtonColor: "#facc15",
+      }).then(() => {
+        window.location.href = "/";
+      });
+
+    } catch (err) {
+      console.error(err);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong. Please try again.",
+        confirmButtonColor: "#facc15",
+      });
     }
-
-    // Save user in localStorage
-    localStorage.setItem("user", JSON.stringify(data.user));
-
-    alert("Login successful!");
-
-    // Redirect to home
-    window.location.href = "/";
   }
-
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900 p-6">
@@ -81,7 +100,6 @@ export default function LoginPage() {
             </button>
           </form>
 
-
           <div className="mt-6 text-center text-gray-400">Or sign in with</div>
           <button
             onClick={() => signIn("google", { callbackUrl: "/" })}
@@ -89,7 +107,7 @@ export default function LoginPage() {
           >
             Google
           </button>
-          {/* Don't have an account */}
+
           <div className="mt-4 text-center text-gray-400">
             Don't have an account?{" "}
             <Link href="/register" className="text-yellow-400 hover:underline">

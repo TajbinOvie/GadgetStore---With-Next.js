@@ -51,8 +51,10 @@ export default function LatestItems() {
                             <h3 className="text-xl font-bold text-yellow-400">{item.title}</h3>
 
                             <p className="text-gray-300 line-clamp-3 mt-2 flex-grow">
-                                {item.summary}
+                                {item.shortDesc}
                             </p>
+
+                            <p className="mt-3 font-semibold">Rating: {item.rating}</p>
 
                             {/* Push button to bottom */}
                             <button

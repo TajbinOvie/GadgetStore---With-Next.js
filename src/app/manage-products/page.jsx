@@ -3,19 +3,26 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function ManageProducts() {
+  const router = useRouter();
   const [gadgets, setGadgets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [userEmail, setUserEmail] = useState("");
+  const [checkingAuth, setCheckingAuth] = useState(true); // track auth check
 
+  // 🔐 Check user login
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      const user = JSON.parse(storedUser);
-      setUserEmail(user.email);
+    if (!storedUser) {
+      router.push("/login"); // redirect if not logged in
+      return;
     }
-  }, []);
+    const user = JSON.parse(storedUser);
+    setUserEmail(user.email);
+    setCheckingAuth(false);
+  }, [router]);
 
   useEffect(() => {
     if (!userEmail) return;
@@ -26,6 +33,8 @@ export default function ManageProducts() {
           `http://localhost:5000/gadgets?email=${userEmail}`
         );
         setGadgets(res.data);
+      } catch (err) {
+        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -47,6 +56,9 @@ export default function ManageProducts() {
       alert("Error deleting gadget");
     }
   }
+
+  // ⬅ Show nothing while checking auth
+  if (checkingAuth) return null;
 
   return (
     <div className="max-w-6xl mx-auto p-8 text-white min-h-screen">

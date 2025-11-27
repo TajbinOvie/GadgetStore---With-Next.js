@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
+import Swal from "sweetalert2";
 
 export default function RegisterPage() {
     const [name, setName] = useState("");
@@ -14,26 +15,44 @@ export default function RegisterPage() {
     async function handleRegister(e) {
         e.preventDefault();
 
-        const res = await fetch("http://localhost:5000/register", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, email, password, photoUrl })
-        });
+        try {
+            const res = await fetch("http://localhost:5000/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, email, password, photoUrl })
+            });
 
-        const data = await res.json();
+            const data = await res.json();
 
-        if (!res.ok) {
-            alert(data.message);
-            return;
+            if (!res.ok) {
+                return Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: data.message || "Registration failed",
+                    confirmButtonColor: "#facc15",
+                });
+            }
+
+            Swal.fire({
+                icon: "success",
+                title: "Success!",
+                text: "Registration successful 🎉",
+                confirmButtonColor: "#facc15",
+            }).then(() => {
+                // Redirect to login page after success
+                window.location.href = "/login";
+            });
+
+        } catch (err) {
+            console.error(err);
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Something went wrong. Please try again.",
+                confirmButtonColor: "#facc15",
+            });
         }
-
-        alert("Registration successful!");
-
-        // Redirect to home (no NextAuth credentials anymore)
-        window.location.href = "/";
     }
-
-
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-900 p-6">
@@ -97,7 +116,6 @@ export default function RegisterPage() {
                         </button>
                     </form>
 
-
                     <div className="mt-6 text-center text-gray-400">Or sign up with</div>
                     <button
                         onClick={() => signIn("google", { callbackUrl: "/" })}
@@ -105,7 +123,7 @@ export default function RegisterPage() {
                     >
                         Google
                     </button>
-                    {/* Already have an account */}
+
                     <div className="mt-4 text-center text-gray-400">
                         Already have an account?{" "}
                         <Link href="/login" className="text-yellow-400 hover:underline">
